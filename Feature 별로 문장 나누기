@@ -1,0 +1,27 @@
+letters_lower=[]
+for i in df['Message']:
+    a=i.lower()
+    letters_lower.append(a)
+df['text_lower']=letters_lower
+df['text_lower']=df['text_lower'].astype(str)
+
+# 미리 KEY USP 만듬
+feature=['linus','asbyt','tidal','50%','jimsreviewroom','karl conrad','meridian']
+
+df_feature=pd.DataFrame(columns=feature)
+for m in range(len(df['text_lower'])):
+    sentences=sent_tokenize(df['text_lower'][m])
+    dictframe=dict.fromkeys(feature)
+    for u in feature:
+        moonzhang=[]
+        for s in sentences:
+            if u in s:
+                moonzhang.append(s)
+        if len(moonzhang)==0:
+            dictframe[u]=''
+        else:
+            dictframe[u]=moonzhang
+    df_feature.loc[m]= dictframe
+
+# 기존 df 와 Feature 분류 df Merge
+TB=pd.concat([df,df_feature],axis=1)
